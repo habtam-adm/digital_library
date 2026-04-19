@@ -1,13 +1,7 @@
 import React from "react";
 import { colleges } from "../Data/Data";
 import { useNavigate } from "react-router-dom";
-import {
-  Container,
-  Typography,
-  Card,
-  CardContent,
-  Box
-} from "@mui/material";
+import { Box, Container, Typography, Card, CardContent } from "@mui/material";
 
 const CollegeList = () => {
   const navigate = useNavigate();
@@ -16,28 +10,41 @@ const CollegeList = () => {
     <Box
       sx={{
         minHeight: "100vh",
-        backgroundColor: "#aeeef4ff",
+        backgroundColor: "#f5f5f5",
         display: "flex",
-        justifyContent: "center",
+        justifyContent: "flex-start",
         alignItems: "center",
-        flexDirection: "column" 
+        flexDirection: "column",
+        pt: 6,
+        pb: 4
       }}
     >
-      
       <Typography
         variant="h3"
-        sx={{ mb: 3, fontWeight: "bold" }}
-        align="center"
+        sx={{
+          mb: 1,
+          fontWeight: 700,
+          fontSize: { xs: "1.8rem", sm: "2.4rem", md: "3rem" },
+          lineHeight: 1.05,
+          textAlign: "center",
+          background: "linear-gradient(90deg,#2b5876 0%,#4e8fb1 100%)",
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent",
+          textShadow: "0 6px 18px rgba(46,60,80,0.08)"
+        }}
       >
-            WELCOME TO DIGITAL LIBRARY
+        WELCOME TO DIGITAL LIBRARY
       </Typography>
 
-    
-      <Container maxWidth="sm">
+      <Typography variant="subtitle1" sx={{ mb: 2, color: "rgba(0,0,0,0.6)", textAlign: "center" }}>
+        Explore colleges, departments and curated books — find what inspires you.
+      </Typography>
+
+  <Container maxWidth="sm" sx={{ mt: { xs: 2, sm: 3, md: 4 } }}>
         <Box
           sx={{
             p: 4,
-            backgroundColor: "#fff",
+            bgcolor: "#fff",
             borderRadius: 3,
             boxShadow: 4
           }}

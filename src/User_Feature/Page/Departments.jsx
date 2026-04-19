@@ -1,7 +1,7 @@
 import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { colleges, departments } from "../Data/Data";
-import { Container, Typography, Card, CardContent } from "@mui/material";
+import { Box, Container, Typography, Card, CardContent } from "@mui/material";
 
 
 
@@ -19,35 +19,40 @@ const Department = () => {
 
   if (!college) {
     return (
-      <Container>
-        <Typography variant="h5">College not found</Typography>
-      </Container>
+      <Box sx={{ minHeight: "60vh", backgroundColor: "#f5f5f5", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <Container sx={{ bgcolor: "#fff", borderRadius: 3, p: 3 }}>
+          <Typography variant="h5">College not found</Typography>
+        </Container>
+      </Box>
     );
   }
 
   return (
-    <Container>
-      <Typography variant="h4" gutterBottom>
-        {college.name}
-      </Typography>
+    <Box sx={{ minHeight: "100vh", backgroundColor: "#f5f5f5", display: "flex", justifyContent: "center", alignItems: "flex-start", pt: 4, pb: 4 }}>
+      <Container maxWidth="sm" sx={{ bgcolor: "#fff", borderRadius: 3, p: 3 }}>
+        <Typography variant="h4" gutterBottom align="center">
+          {college.name}
+        </Typography>
 
-      <Typography variant="h5" gutterBottom align="center">
-        Departments
-      </Typography>
+        <Typography variant="h5" gutterBottom align="center">
+          Departments
+        </Typography>
 
-      {filteredDepartments.map((dept) => (
-        <Card
-          key={dept.id}
-          sx={{ mb: 2, cursor: "pointer" }}
-     onClick={() => navigate(`/department/${dept.id}`)}
-        >
-          <CardContent>
-            <Typography align="center" variant="h6">{dept.name}
-            </Typography>
-          </CardContent>
-        </Card>
-      ))}
-    </Container>
+        {filteredDepartments.map((dept) => (
+          <Card
+            key={dept.id}
+            sx={{ mb: 2, cursor: "pointer", transition: "0.2s", '&:hover': { boxShadow: 6 } }}
+            onClick={() => navigate(`/department/${dept.id}`)}
+          >
+            <CardContent>
+              <Typography align="center" variant="h6">
+                {dept.name}
+              </Typography>
+            </CardContent>
+          </Card>
+        ))}
+      </Container>
+    </Box>
   );
 };
 

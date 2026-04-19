@@ -32,10 +32,10 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/verify-email" element={<EmailVerification />} />
 
-         <Route path="/" element={<CollegeList />} />
-<Route path="/college/:id" element={<Department />} />
-<Route path="/department/:id" element={<BookList />} />
-<Route path="/book/:bookId" element={<BookDetails />} />
+        <Route path="/" element={<CollegeList />} />
+        <Route path="/college/:id" element={<Department />} />
+        <Route path="/department/:id" element={<BookList />} />
+        <Route path="/book/:bookId" element={<BookDetails />} />
 
         </Routes>
       </Router>
