@@ -26,10 +26,8 @@ function App() {
       <Router>
         <Routes>
 
-          <Route path="/" element={<LoginUI />} />
           <Route path="/login" element={<LoginUI />} />
           
-        
           <Route path="/signup" element={<Signup />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/verify-email" element={<EmailVerification />} />
