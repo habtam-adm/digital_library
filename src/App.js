@@ -26,18 +26,16 @@ function App() {
       <Router>
         <Routes>
 
-          <Route path="/" element={<LoginUI />} />
           <Route path="/login" element={<LoginUI />} />
           
-        
           <Route path="/signup" element={<Signup />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/verify-email" element={<EmailVerification />} />
 
-         <Route path="/" element={<CollegeList />} />
-<Route path="/college/:id" element={<Department />} />
-<Route path="/department/:id" element={<BookList />} />
-<Route path="/book/:bookId" element={<BookDetails />} />
+        <Route path="/" element={<CollegeList />} />
+        <Route path="/college/:id" element={<Department />} />
+        <Route path="/department/:id" element={<BookList />} />
+        <Route path="/book/:bookId" element={<BookDetails />} />
 
         </Routes>
       </Router>
