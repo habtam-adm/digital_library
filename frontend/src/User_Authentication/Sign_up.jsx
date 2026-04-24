@@ -32,10 +32,6 @@ export default function Signup() {
       setError("All fields are required");
       return;
     }
-    if (!form.name || !form.email || !form.password || !form.confirmPassword) {
-      setError("All fields are required");
-      return;
-    }
     if (!form.email.includes("@")) {
       setError("Invalid email format");
       return;
