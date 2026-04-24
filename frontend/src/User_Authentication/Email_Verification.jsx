@@ -1,6 +1,14 @@
 import React, { useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
-import { Container, Box, TextField, Button, Typography, Alert, Link } from "@mui/material";
+import {
+  Container,
+  Box,
+  TextField,
+  Button,
+  Typography,
+  Alert,
+  Link,
+} from "@mui/material";
 
 const API_BASE = process.env.REACT_APP_API_BASE || "http://localhost:5000/api";
 
@@ -20,7 +28,7 @@ export default function EmailVerification() {
     }
 
     try {
-      const response = await fetch("https://yourapi.com/verify-email", {
+      const response = await fetch(`${API_BASE}/verify-email`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, code }),
@@ -45,8 +53,16 @@ export default function EmailVerification() {
           Email Verification
         </Typography>
 
-        {message && <Alert severity="success" sx={{ mb: 2 }}>{message}</Alert>}
-        {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+        {message && (
+          <Alert severity="success" sx={{ mb: 2 }}>
+            {message}
+          </Alert>
+        )}
+        {error && (
+          <Alert severity="error" sx={{ mb: 2 }}>
+            {error}
+          </Alert>
+        )}
 
         <TextField
           label="Email"

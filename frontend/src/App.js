@@ -16,7 +16,7 @@ import AdminPanel from './pages/Admin/AdminPanel';
 const defaultTheme = createTheme({
   palette: {
     primary: {
-      main: '#1976d2', 
+      main: '#1976d2',
     },
     secondary: {
       main: '#dc004e',
@@ -28,17 +28,17 @@ function App() {
   return (
     <AuthProvider>
       <ThemeProvider theme={defaultTheme}>
-        <CssBaseline /> 
+        <CssBaseline />
         <Router>
           <Routes>
-            <Route path="/" element={<LoginUI />} /> 
+            <Route path="/" element={<LoginUI />} />
             <Route path="/login" element={<LoginUI />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/verify-email" element={<EmailVerification />} />
 
             <Route path="/admin" element={<AdminPanel />} />
-            
+
           </Routes>
         </Router>
       </ThemeProvider>

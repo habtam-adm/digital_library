@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link as RouterLink, useNavigate } from "react-router-dom"; // ✅ useNavigate ተጨምሯል
+import React, { useState } from "react";
+import { useNavigate, Link as RouterLink } from "react-router-dom";
 import {
   Container,
   Box,
@@ -7,65 +7,52 @@ import {
   Button,
   Typography,
   Alert,
-  Link
+  Link,
 } from "@mui/material";
 
 const API_BASE = process.env.REACT_APP_API_BASE || "http://localhost:5000/api";
 
-export default function LoginUI() {
+export default function Login() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
   const [error, setError] = useState("");
-  
-  const navigate = useNavigate(); // ✅ የናቪጌሽን ፋንክሽን እዚህ ተፈጥሯል
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
-    setMessage("");
     setError("");
-
-    if (!email || !password) {
-      setError("Please enter email and password.");
-      return;
-    }
-
+    setLoading(true);
     try {
       const response = await fetch(`${API_BASE}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
-
       const data = await response.json();
-
+      setLoading(false);
       if (response.ok) {
-        setMessage("Login successful. Redirecting...");
-        setError("");
-        
-        // ✅ Login ሲሳካ ከ1.5 ሰከንድ በኋላ ወደ Admin Panel ይወስደዋል
-        setTimeout(() => {
-          navigate("/admin");
-        }, 1500);
-        
+        localStorage.setItem("user", JSON.stringify(data.user));
+        navigate("/dashboard");
       } else {
-        setError(data.error || "Invalid credentials. Please try again.");
+        setError(data.error || "Login failed");
       }
     } catch (err) {
-      console.error(err);
-      setError("Server error. Please try again later.");
+      setLoading(false);
+      setError("Server not reachable. Is the backend running?");
     }
   };
 
   return (
     <Container maxWidth="sm">
-      <Box sx={{ mt: 8, p: 3, boxShadow: 3, borderRadius: 2 }}>
-        <Typography variant="h4" align="center" gutterBottom>
+      <Box sx={{ mt: 8, p: 4, boxShadow: 3, borderRadius: 2 }}>
+        <Typography variant="h5" mb={2}>
           Login
         </Typography>
-
-        {message && <Alert severity="success" sx={{ mb: 2 }}>{message}</Alert>}
-        {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
-
+        {error && (
+          <Alert severity="error" sx={{ mb: 2 }}>
+            {error}
+          </Alert>
+        )}
         <TextField
           label="Email"
           type="email"
@@ -74,7 +61,6 @@ export default function LoginUI() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-
         <TextField
           label="Password"
           type="password"
@@ -83,22 +69,21 @@ export default function LoginUI() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-
         <Button
           variant="contained"
           fullWidth
           sx={{ mt: 2 }}
           onClick={handleLogin}
+          disabled={loading}
         >
-          Login
+          {loading ? "Logging in..." : "Login"}
         </Button>
-
         <Box sx={{ mt: 2, display: "flex", justifyContent: "space-between" }}>
+          <Link component={RouterLink} to="/signup">
+            Don't have an account? Sign up
+          </Link>
           <Link component={RouterLink} to="/forgot-password">
             Forgot password?
-          </Link>
-          <Link component={RouterLink} to="/signup">
-            Sign up
           </Link>
         </Box>
       </Box>
