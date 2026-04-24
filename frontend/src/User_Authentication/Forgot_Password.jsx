@@ -8,11 +8,11 @@ export default function ForgotPassword() {
   const [email, setEmail] = useState("");
   const [code, setCode] = useState("");
   const [newPassword, setNewPassword] = useState("");
-  const [step, setStep] = useState(1); // Step 1: request code, Step 2: reset password
+  const [step, setStep] = useState(1); 
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
-  // Step 1: Request reset code
+  
   const handleRequestCode = async () => {
     setMessage(""); setError("");
     if (!email) {
@@ -40,7 +40,7 @@ export default function ForgotPassword() {
     }
   };
 
-  // Step 2: Reset password
+  
   const handleResetPassword = async () => {
     setMessage(""); setError("");
     if (!code || !newPassword) {

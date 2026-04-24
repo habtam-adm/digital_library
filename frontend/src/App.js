@@ -1,30 +1,48 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { CssBaseline } from "@mui/material";
 
-// አራቱን ገጾች ከ User_Authentication ፎልደር ውስጥ Import እናደርጋለን
+import { AuthProvider } from "./context/AuthContext";
+
 import LoginUI from './User_Authentication/Login';
 import Signup from './User_Authentication/Sign_up';
 import ForgotPassword from './User_Authentication/Forgot_Password';
 import EmailVerification from './User_Authentication/Email_Verification';
 
-const defaultTheme = createTheme();
+import AdminPanel from './pages/Admin/AdminPanel';
+
+
+const defaultTheme = createTheme({
+  palette: {
+    primary: {
+      main: '#1976d2', 
+    },
+    secondary: {
+      main: '#dc004e',
+    },
+  },
+});
 
 function App() {
   return (
-    <ThemeProvider theme={defaultTheme}>
-      <Router>
-        <Routes>
-          <Route path="/" element={<LoginUI />} />
-          <Route path="/login" element={<LoginUI />} />
-          rm -rf frontend/.git
-        
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/verify-email" element={<EmailVerification />} />
-        </Routes>
-      </Router>
-    </ThemeProvider>
+    <AuthProvider>
+      <ThemeProvider theme={defaultTheme}>
+        <CssBaseline /> 
+        <Router>
+          <Routes>
+            <Route path="/" element={<LoginUI />} /> 
+            <Route path="/login" element={<LoginUI />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/verify-email" element={<EmailVerification />} />
+
+            <Route path="/admin" element={<AdminPanel />} />
+            
+          </Routes>
+        </Router>
+      </ThemeProvider>
+    </AuthProvider>
   );
 }
 

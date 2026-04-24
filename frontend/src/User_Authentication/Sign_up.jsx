@@ -13,7 +13,7 @@ import {
 const API_BASE = process.env.REACT_APP_API_BASE || "http://localhost:5000/api";
 
 export default function Signup() {
-  // State
+  
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -24,16 +24,16 @@ export default function Signup() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  // Handle input change
+  
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // Handle submit
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validation
+    
     if (!form.name || !form.email || !form.password || !form.confirmPassword) {
       setError("All fields are required");
       setSuccess("");

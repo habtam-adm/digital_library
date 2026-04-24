@@ -20,7 +20,6 @@ export default function EmailVerification() {
     }
 
     try {
-      // Replace with your backend API call
       const response = await fetch("https://yourapi.com/verify-email", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

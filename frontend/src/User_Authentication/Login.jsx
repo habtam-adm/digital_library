@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom"; // ✅ useNavigate ተጨምሯል
 import {
   Container,
   Box,
@@ -17,6 +17,8 @@ export default function LoginUI() {
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  
+  const navigate = useNavigate(); // ✅ የናቪጌሽን ፋንክሽን እዚህ ተፈጥሯል
 
   const handleLogin = async () => {
     setMessage("");
@@ -39,7 +41,12 @@ export default function LoginUI() {
       if (response.ok) {
         setMessage("Login successful. Redirecting...");
         setError("");
-        // TODO: trigger redirect with react-router or set auth state
+        
+        // ✅ Login ሲሳካ ከ1.5 ሰከንድ በኋላ ወደ Admin Panel ይወስደዋል
+        setTimeout(() => {
+          navigate("/admin");
+        }, 1500);
+        
       } else {
         setError(data.error || "Invalid credentials. Please try again.");
       }
