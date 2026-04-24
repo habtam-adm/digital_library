@@ -1,27 +1,43 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 
-// አራቱን ገጾች ከ User_Authentication ፎልደር ውስጥ Import እናደርጋለን
-import LoginUI from './User_Authentication/Login';
-import Signup from './User_Authentication/Sign_up';
-import ForgotPassword from './User_Authentication/Forgot_Password';
-import EmailVerification from './User_Authentication/Email_Verification';
+import Layout from "./layout/Layout";
 
-const defaultTheme = createTheme();
+// Auth Pages
+import Login from "./User_Authentication/Login";
+import Signup from "./User_Authentication/Sign_up";
+import ForgotPassword from "./User_Authentication/Forgot_Password";
+import EmailVerification from "./User_Authentication/Email_Verification";
+
+// Main Pages
+import Dashboard from "./User_Authentication/Dashboard";
+import BookList from "./User/bookList";
+import BookDetails from "./User/book-details";
+import Colleges from "./User/Colleges";
+import Departments from "./User/Departments";
+
+const theme = createTheme();
 
 function App() {
   return (
-    <ThemeProvider theme={defaultTheme}>
+    <ThemeProvider theme={theme}>
       <Router>
         <Routes>
-          <Route path="/" element={<LoginUI />} />
-          <Route path="/login" element={<LoginUI />} />
-          rm -rf frontend/.git
-        
+          {/* AUTH ROUTES */}
+          <Route path="/" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/verify-email" element={<EmailVerification />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+
+          {/* MAIN APP WITH LAYOUT */}
+          <Route path="/" element={<Layout />}>
+            <Route path="dashboard" element={<Dashboard />} />
+            <Route path="colleges" element={<Colleges />} />
+            <Route path="departments" element={<Departments />} />
+            <Route path="books" element={<BookList />} />
+            <Route path="books/:id" element={<BookDetails />} />
+          </Route>
         </Routes>
       </Router>
     </ThemeProvider>
