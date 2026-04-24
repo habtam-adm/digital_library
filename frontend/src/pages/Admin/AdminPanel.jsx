@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, Typography, Box, Divider, Paper } from "@mui/material";
+import { Container, Typography, Box, Divider } from "@mui/material";
 import { getBooks } from "../../api/bookApi";
 
 import AddBook from "../../components/Admin/AddBook.jsx";
