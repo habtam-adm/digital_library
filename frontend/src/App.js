@@ -10,10 +10,10 @@ import Signup from "./User_Authentication/Sign_up";
 import ForgotPassword from "./User_Authentication/Forgot_Password";
 import EmailVerification from "./User_Authentication/Email_Verification";
 
-// Main Pages
+// Pages
 import Dashboard from "./User_Authentication/Dashboard";
 import BookList from "./User/bookList";
-import BookDetails from "./User/book-details";
+import BookDetails from "./User/BookDetails";
 import Colleges from "./User/Colleges";
 import Departments from "./User/Departments";
 
@@ -30,12 +30,12 @@ function App() {
           <Route path="/verify-email" element={<EmailVerification />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
 
-          {/* MAIN APP WITH LAYOUT */}
-          <Route path="/" element={<Layout />}>
-            <Route path="dashboard" element={<Dashboard />} />
-            <Route path="colleges" element={<Colleges />} />
-            <Route path="departments" element={<Departments />} />
-            <Route path="books" element={<BookList />} />
+          {/* MAIN APP */}
+          <Route element={<Layout />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/colleges" element={<Colleges />} />
+            <Route path="/departments" element={<Departments />} />
+            <Route path="/books" element={<BookList />} />
             <Route path="books/:id" element={<BookDetails />} />
           </Route>
         </Routes>

@@ -1,0 +1,158 @@
+/* =========================
+   GLOBAL RESET
+   ========================= */
+body {
+  margin: 0;
+  font-family: "Roboto", sans-serif;
+  background-color: #f4f6f8;
+}
+
+/* =========================
+   PAGE CONTAINER
+   ========================= */
+.page-container {
+  margin-top: 40px;
+  padding: 20px;
+}
+
+/* =========================
+   TITLES
+   ========================= */
+.page-title {
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 25px;
+  color: #333;
+  letter-spacing: 0.5px;
+}
+
+/* =========================
+   LIST ITEMS (Cards Style)
+   ========================= */
+.list-item {
+  margin-bottom: 12px;
+  border-radius: 12px;
+  background-color: #ffffff;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+}
+
+.list-item:hover {
+  transform: translateY(-3px);
+  background-color: #acbee2;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+/* =========================
+   BOOK CARD
+   ========================= */
+.book-card {
+  padding: 30px;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+  transition: 0.3s;
+}
+
+.book-card:hover {
+  transform: scale(1.01);
+}
+
+/* =========================
+   BUTTONS
+   ========================= */
+.btn-primary {
+  margin-top: 20px !important;
+  background: linear-gradient(45deg, #1976d2, #42a5f5) !important;
+  color: #fff !important;
+  font-weight: 600 !important;
+  padding: 10px 0 !important;
+  border-radius: 8px !important;
+  transition: 0.3s !important;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(45deg, #125aa0, #1976d2) !important;
+}
+
+/* =========================
+   LINKS
+   ========================= */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* =========================
+   SIDEBAR (Drawer)
+   ========================= */
+.MuiDrawer-paper {
+  background-color: #2d3744 !important;
+  color: white !important;
+}
+
+/* Sidebar title */
+.MuiDrawer-paper h6 {
+  text-align: center;
+  font-weight: bold;
+  padding: 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+/* Sidebar items */
+.MuiListItemButton-root {
+  border-radius: 8px;
+  margin: 6px 10px;
+  transition: 0.3s;
+}
+
+.MuiListItemButton-root {
+  border-radius: 8px;
+  margin: 6px 10px;
+  transition: all 0.3s ease;
+}
+
+.MuiListItemButton-root:hover {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  transform: translateX(5px);
+}
+
+.MuiListItemButton-root:hover .MuiListItemText-primary {
+  color: #ffffff !important;
+}
+/* =========================
+   NAVBAR (AppBar)
+   ========================= */
+.MuiAppBar-root {
+  background: linear-gradient(90deg, #1976d2, #1565c0) !important;
+}
+
+/* =========================
+   SCROLLBAR (Nice UI)
+   ========================= */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #92c1d8;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #90a4ae;
+}
+
+/* =========================
+   RESPONSIVE
+   ========================= */
+@media (max-width: 600px) {
+  .page-container {
+    padding: 10px;
+  }
+
+  .book-card {
+    padding: 20px;
+  }
+}
