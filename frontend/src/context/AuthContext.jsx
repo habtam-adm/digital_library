@@ -1,33 +1,63 @@
-import React, { createContext, useState, useContext, useEffect } from "react";
+import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { TOKEN_KEY } from "../api/client";
+import { fetchMe, login as loginRequest } from "../api/library";
 
-const AuthContext = createContext();
+const AuthContext = createContext(null);
+const USER_KEY = "wku_user";
 
-export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+export function AuthProvider({ children }) {
+  const [user, setUser] = useState(() => {
+    const stored = localStorage.getItem(USER_KEY);
+    return stored ? JSON.parse(stored) : null;
+  });
+  const [loading, setLoading] = useState(Boolean(localStorage.getItem(TOKEN_KEY)));
 
   useEffect(() => {
-    const savedUser = localStorage.getItem("user");
-    if (savedUser) {
-      setUser(JSON.parse(savedUser));
+    if (!localStorage.getItem(TOKEN_KEY)) {
+      setLoading(false);
+      return;
     }
-    setLoading(false);
+    // Refresh the cached profile and drop the session if the token expired.
+    fetchMe()
+      .then(({ data }) => {
+        setUser(data.user);
+        localStorage.setItem(USER_KEY, JSON.stringify(data.user));
+      })
+      .catch(() => {
+        localStorage.removeItem(TOKEN_KEY);
+        localStorage.removeItem(USER_KEY);
+        setUser(null);
+      })
+      .finally(() => setLoading(false));
   }, []);
 
-  const loginUser = (userData) => {
-    setUser(userData);
-    localStorage.setItem("user", JSON.stringify(userData)); 
-  };
-
-  const logoutUser = () => {
-    setUser(null);
-    localStorage.removeItem("user");
-  };
-
-  return (
-    <AuthContext.Provider value={{ user, loginUser, logoutUser, loading }}>
-      {!loading && children}
-    </AuthContext.Provider>
+  const value = useMemo(
+    () => ({
+      user,
+      loading,
+      isStaff: ["librarian", "admin"].includes(user?.role),
+      isAdmin: user?.role === "admin",
+      login: async (email, password) => {
+        const { data } = await loginRequest({ email, password });
+        localStorage.setItem(TOKEN_KEY, data.token);
+        localStorage.setItem(USER_KEY, JSON.stringify(data.user));
+        setUser(data.user);
+        return data.user;
+      },
+      logout: () => {
+        localStorage.removeItem(TOKEN_KEY);
+        localStorage.removeItem(USER_KEY);
+        setUser(null);
+      },
+    }),
+    [user, loading],
   );
-};
-export const useAuth = () => useContext(AuthContext);
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+}
+
+export function useAuth() {
+  const context = useContext(AuthContext);
+  if (!context) throw new Error("useAuth must be used inside AuthProvider");
+  return context;
+}

@@ -34,3 +34,7 @@ Thumbs.db
 # react cache
 frontend/.eslintcache
 frontend/.cache
+
+# uploaded digital copies
+backend/uploads/*
+!backend/uploads/.gitkeep

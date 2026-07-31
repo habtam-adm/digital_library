@@ -1,68 +1,69 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { CssBaseline } from "@mui/material";
+import React from "react";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
 
 import { AuthProvider } from "./context/AuthContext";
-
-// Auth Pages
-import LoginUI from './User_Authentication/Login';
-import Signup from './User_Authentication/Sign_up';
-import ForgotPassword from './User_Authentication/Forgot_Password';
-import EmailVerification from './User_Authentication/Email_Verification';
-
-// Admin
-import AdminPanel from './pages/Admin/AdminPanel';
-
-// User Pages
-import Dashboard from "./User_Authentication/Dashboard";
-import BookList from "./User/bookList";
-import BookDetails from "./User/BookDetails";
-import Colleges from "./User/Colleges";
-import Departments from "./User/Departments";
-
-// (⚠️ make sure you actually have this file)
+import { I18nProvider } from "./context/I18nContext";
 import Layout from "./components/Layout";
+import ProtectedRoute from "./components/ProtectedRoute";
 
-const defaultTheme = createTheme({
+import Home from "./pages/Home";
+import Catalog from "./pages/Catalog";
+import ResourceDetail from "./pages/ResourceDetail";
+import Colleges from "./pages/Colleges";
+import Departments from "./pages/Departments";
+import MyLoans from "./pages/MyLoans";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import ForgotPassword from "./pages/ForgotPassword";
+import VerifyEmail from "./pages/VerifyEmail";
+import AdminPanel from "./pages/admin/AdminPanel";
+
+const theme = createTheme({
   palette: {
-    primary: { main: '#1976d2' },
-    secondary: { main: '#dc004e' },
+    primary: { main: "#0b5d3b" },
+    secondary: { main: "#f2a900" },
+  },
+  typography: {
+    fontFamily:
+      '"Noto Sans Ethiopic", "Abyssinica SIL", Roboto, "Helvetica Neue", Arial, sans-serif',
   },
 });
 
-function App() {
+export default function App() {
   return (
-    <AuthProvider>
-      <ThemeProvider theme={defaultTheme}>
-        <CssBaseline />
-        <Router>
-          <Routes>
+    <I18nProvider>
+      <AuthProvider>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <BrowserRouter>
+            <Routes>
+              <Route element={<Layout />}>
+                <Route path="/" element={<Home />} />
+                <Route path="/catalog" element={<Catalog />} />
+                <Route path="/resources/:id" element={<ResourceDetail />} />
+                <Route path="/colleges" element={<Colleges />} />
+                <Route path="/departments" element={<Departments />} />
 
-            {/* AUTH */}
-            <Route path="/" element={<LoginUI />} />
-            <Route path="/login" element={<LoginUI />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/verify-email" element={<EmailVerification />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/signup" element={<Signup />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/verify-email" element={<VerifyEmail />} />
 
-            {/* ADMIN */}
-            <Route path="/admin" element={<AdminPanel />} />
+                <Route element={<ProtectedRoute />}>
+                  <Route path="/my-loans" element={<MyLoans />} />
+                </Route>
+                <Route element={<ProtectedRoute roles={["librarian", "admin"]} />}>
+                  <Route path="/admin" element={<AdminPanel />} />
+                </Route>
 
-            {/* MAIN APP */}
-            <Route element={<Layout />}>
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/colleges" element={<Colleges />} />
-              <Route path="/departments" element={<Departments />} />
-              <Route path="/books" element={<BookList />} />
-              <Route path="/books/:id" element={<BookDetails />} />
-            </Route>
-
-          </Routes>
-        </Router>
-      </ThemeProvider>
-    </AuthProvider>
+                <Route path="*" element={<Navigate to="/" replace />} />
+              </Route>
+            </Routes>
+          </BrowserRouter>
+        </ThemeProvider>
+      </AuthProvider>
+    </I18nProvider>
   );
 }
-
-export default App;
