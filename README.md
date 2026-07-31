@@ -1,70 +1,101 @@
-# Getting Started with Create React App
+# Wolkite University Digital Library
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+የወልቂጤ ዩኒቨርሲቲ ዲጂታል ቤተ መጻሕፍት
 
-## Available Scripts
+A digital library for Wolkite University: one catalogue for books, undergraduate
+theses, teaching modules, past exam papers and journal articles from every college,
+with circulation (borrow / return / fines), a bilingual **English + Amharic**
+interface, Ethiopian calendar dates and an **OAI-PMH** endpoint that exposes the
+institutional repository in Dublin Core so national aggregators can harvest it.
 
-In the project directory, you can run:
+```
+frontend/   React (Create React App) + MUI single page application
+backend/    Express REST API + MySQL (XAMPP compatible)
+```
 
-### `npm start`
+## Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+| Area | What it does |
+| --- | --- |
+| Catalogue | Search by title / author / subject / ISBN, filter by material type, language, college, department, year range, availability and digital copy, sorted and paginated |
+| Resource page | Full Dublin Core style metadata, in-browser PDF reader, download, related items |
+| Circulation | Borrow and return, per-role loan limits and periods, automatic overdue fines in ETB |
+| Accounts | Signup with university ID (`WKU/1234/15`), email verification code, password reset, JWT sessions, roles: student, instructor, librarian, admin |
+| Administration | Add / edit / delete resources with file upload, loan register with overdue tracking, user role management, statistics by material type and college |
+| Ethiopian context | Amharic UI and Amharic titles, Ethiopian calendar (E.C.) shown next to Gregorian dates, the eight Wolkite University colleges and their departments preloaded |
+| Interoperability | `/oai` implements OAI-PMH 2.0 (`Identify`, `ListMetadataFormats`, `ListSets`, `ListIdentifiers`, `ListRecords`, `GetRecord`) with `oai_dc` metadata |
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Requirements
 
-### `npm test`
+- Node.js 18 or newer
+- MySQL 5.7+ / MariaDB (XAMPP works out of the box)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Running it
 
-### `npm run build`
+### 1. Backend
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+cd backend
+cp .env.example .env      # defaults match XAMPP: user root, empty password
+npm install
+npm run db:setup          # creates library_db, applies the schema, seeds data
+npm start                 # http://localhost:5000
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+`npm run db:setup` seeds the colleges and departments of the university, a starter
+catalogue and four demo accounts:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+| Role | Email | Password |
+| --- | --- | --- |
+| Administrator | admin@wku.edu.et | Admin@123 |
+| Librarian | librarian@wku.edu.et | Library@123 |
+| Instructor | instructor@wku.edu.et | Teach@123 |
+| Student | student@wku.edu.et | Student@123 |
 
-### `npm run eject`
+Change these before deploying anywhere real.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### 2. Frontend
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+cd frontend
+cp .env.example .env      # REACT_APP_API_BASE=http://localhost:5000
+npm install
+npm start                 # http://localhost:3000
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## API
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+| Method | Endpoint | Notes |
+| --- | --- | --- |
+| POST | `/api/auth/signup` | create an account, returns the verification code |
+| POST | `/api/auth/verify-email` | confirm the code |
+| POST | `/api/auth/login` | returns a JWT |
+| GET | `/api/auth/me` | current profile |
+| POST | `/api/auth/request-reset`, `/api/auth/reset-password` | password reset |
+| GET | `/api/colleges`, `/api/departments` | academic structure with counts |
+| GET | `/api/resources` | `q, type, language, college_id, department_id, year_from, year_to, available, digital, sort, page, per_page` |
+| GET | `/api/resources/:id` | resource, related items, your active loan |
+| GET | `/api/resources/:id/file` | stream the digital copy |
+| POST/PUT/DELETE | `/api/resources` | librarian or admin, `multipart/form-data` for uploads |
+| GET/POST | `/api/loans`, `/api/loans/mine`, `/api/loans/:id/return` | circulation |
+| GET | `/api/stats/overview`, `/api/stats/admin`, `/api/stats/users` | dashboards |
+| GET | `/oai?verb=...` | OAI-PMH 2.0 provider |
 
-## Learn More
+Circulation policy lives in `backend/src/config/env.js`: students may hold 3 items
+for 14 days, staff 5 items for 30 days, and the fine is 5 ETB per day late.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Harvesting the repository
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```bash
+curl "http://localhost:5000/oai?verb=Identify"
+curl "http://localhost:5000/oai?verb=ListRecords&metadataPrefix=oai_dc&set=type:thesis"
+```
 
-### Code Splitting
+Sets are `type:<book|thesis|journal|module|exam|reference>` and
+`college:<CCI|CET|CNCS|CBE|CMHS|CANR|CSSH|SOL>`.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Tests
 
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```bash
+cd frontend && CI=true npm test
+```
